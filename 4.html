@@ -20,8 +20,8 @@
   </p>
   <p>扭转：<span id="gamma">0</span>
   </p>
-  <p>指北针指向：<span id="heading">0</span>度</p>
-  <p>指北针精度：<span id="accuracy">0</span>度</p>
+  <!-- <p>指北针指向：<span id="heading">0</span>度</p>
+  <p>指北针精度：<span id="accuracy">0</span>度</p> -->
   <script>
     // $(window).bind('deviceorientation', function (g) {
     //   console.log(g)
@@ -45,8 +45,8 @@
       document.getElementById("alpha").innerHTML = event.alpha;
       document.getElementById("beta").innerHTML = event.beta;
       document.getElementById("gamma").innerHTML = event.gamma;
-      document.getElementById("heading").innerHTML = event.webkitCompassHeading;
-      document.getElementById("accuracy").innerHTML = event.webkitCompassAccuracy;
+      // document.getElementById("heading").innerHTML = event.webkitCompassHeading;
+      // document.getElementById("accuracy").innerHTML = event.webkitCompassAccuracy;
     }
     /*
       setDeviceMotion 添加陀螺仪监控
