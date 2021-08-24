@@ -66,6 +66,7 @@
             }
           })
           .catch((err) => {
+            errCb(err)
             errCb('用户未允许权限')
           })
       } else {
