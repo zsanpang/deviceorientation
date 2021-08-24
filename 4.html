@@ -18,27 +18,23 @@
   </p>
   <p>指北针指向：<span id="heading">0</span>度</p>
   <p>指北针精度：<span id="accuracy">0</span>度</p>
-  <button class="btn">点击</button>
   <script>
-    $(window).bind('deviceorientation', function (g) {
-      console.log(g)
-      console.log(g.originalEvent)
-      document.getElementById("alpha").innerHTML = g.originalEvent.alpha;
-      document.getElementById("beta").innerHTML = g.originalEvent.beta;
-      document.getElementById("gamma").innerHTML = g.originalEvent.gamma;
+    // $(window).bind('deviceorientation', function (g) {
+    //   console.log(g)
+    //   console.log(g.originalEvent)
+    //   document.getElementById("alpha").innerHTML = g.originalEvent.alpha;
+    //   document.getElementById("beta").innerHTML = g.originalEvent.beta;
+    //   document.getElementById("gamma").innerHTML = g.originalEvent.gamma;
+    // })
+
+    // window.addEventListener('deviceorientation', function(event) {
+    //   // alert(event.alpha + ' : ' + event.beta + ' : ' + event.gamma);
+    // });
+
+    setDeviceMotion(DeviceOrientationHandler, (errMessage) => {
+      alert(errMessage)
     })
 
-    window.addEventListener('deviceorientation', function(event) {
-      // alert(event.alpha + ' : ' + event.beta + ' : ' + event.gamma);
-    });
-
-    //检查手机是否支持
-    if (window.DeviceOrientationEvent) {
-      alert('可能支持');
-      window.addEventListener('deviceorientation', DeviceOrientationHandler, false);
-    } else {
-      alert("您的浏览器不支持HTML5 DeviceOrientation接口");
-    }
     //事件处理逻辑
     function DeviceOrientationHandler(event) {
       // alert(event)
@@ -48,27 +44,41 @@
       document.getElementById("heading").innerHTML = event.webkitCompassHeading;
       document.getElementById("accuracy").innerHTML = event.webkitCompassAccuracy;
     }
-
-    $('.btn').on('click', function() {
-      alert(typeof DeviceOrientationEvent.requestPermission)
-      if (typeof DeviceOrientationEvent.requestPermission == 'function') {
+    /*
+      setDeviceMotion 添加陀螺仪监控
+      参数： cb devicemotion的事件处理函数; errCb 不支持devicemotion时的处理回调
+    */
+    function setDeviceMotion(cb, errCb) {
+      if (!window.DeviceOrientationEvent) {
+        errCb('设备不支持DeviceMotion')
+        return
+      }
+      if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+        // IOS13+ 设备
         DeviceOrientationEvent.requestPermission()
-          .then(permissionState => {
-            alert(permissionState)
+          .then((permissionState) => {
             if (permissionState === 'granted') {
-              // handle data
-            } else {
-              // handle denied
+              window.addEventListener('deviceorientation', cb)
             }
           })
           .catch((err) => {
-            alert(err)
-          });
+            errCb('用户未允许权限')
+          })
       } else {
-        // han
-        console.log(typeof DeviceOrientationEvent)
+        // 其他支持加速度检测的系统
+        let timer = setTimeout(function () {
+          errCb('用户未开启权限')
+        }, 1000)
+        window.addEventListener(
+          'deviceorientation',
+          (e) => {
+            clearTimeout(timer)
+          },
+          { once: true }
+        )
+        window.addEventListener('deviceorientation', cb)
       }
-  })
+    }
   </script>
 </body>
 
