@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+</head>
+
+<body>
+  <p>左右：<span id="alpha">0</span>
+  </p>
+  <p>前后：<span id="beta">0</span>
+  </p>
+  <p>扭转：<span id="gamma">0</span>
+  </p>
+  <p>指北针指向：<span id="heading">0</span>度</p>
+  <p>指北针精度：<span id="accuracy">0</span>度</p>
+  <button class="btn">点击</button>
+  <script>
+    $(window).bind('deviceorientation', function (g) {
+      console.log(g)
+      console.log(g.originalEvent)
+      document.getElementById("alpha").innerHTML = g.originalEvent.alpha;
+      document.getElementById("beta").innerHTML = g.originalEvent.beta;
+      document.getElementById("gamma").innerHTML = g.originalEvent.gamma;
+    })
+
+    window.addEventListener('deviceorientation', function(event) {
+      // alert(event.alpha + ' : ' + event.beta + ' : ' + event.gamma);
+    });
+
+    //检查手机是否支持
+    if (window.DeviceOrientationEvent) {
+      alert('可能支持');
+      window.addEventListener('deviceorientation', DeviceOrientationHandler, false);
+    } else {
+      alert("您的浏览器不支持HTML5 DeviceOrientation接口");
+    }
+    //事件处理逻辑
+    function DeviceOrientationHandler(event) {
+      // alert(event)
+      document.getElementById("alpha").innerHTML = event.alpha;
+      document.getElementById("beta").innerHTML = event.beta;
+      document.getElementById("gamma").innerHTML = event.gamma;
+      document.getElementById("heading").innerHTML = event.webkitCompassHeading;
+      document.getElementById("accuracy").innerHTML = event.webkitCompassAccuracy;
+    }
+
+    $('.btn').on('click', function() {
+      alert(typeof DeviceOrientationEvent.requestPermission)
+      if (typeof DeviceOrientationEvent.requestPermission == 'function') {
+        DeviceOrientationEvent.requestPermission()
+          .then(permissionState => {
+            alert(permissionState)
+            if (permissionState === 'granted') {
+              // handle data
+            } else {
+              // handle denied
+            }
+          })
+          .catch((err) => {
+            alert(err)
+          });
+      } else {
+        // han
+        console.log(typeof DeviceOrientationEvent)
+      }
+  })
+  </script>
+</body>
+
+</html>
