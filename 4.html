@@ -62,7 +62,7 @@
         DeviceOrientationEvent.requestPermission()
           .then((permissionState) => {
             if (permissionState === 'granted') {
-              window.addEventListener('deviceorientation', cb)
+              window.addEventListener('deviceorientation', cb, false)
             }
           })
           .catch((err) => {
@@ -80,7 +80,7 @@
           },
           { once: true }
         )
-        window.addEventListener('deviceorientation', cb)
+        window.addEventListener('deviceorientation', cb, false)
       }
     }
   </script>
